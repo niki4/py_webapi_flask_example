@@ -2,7 +2,7 @@ import json
 
 from marshmallow import Schema, fields
 
-import api
+import api.endpoints
 
 
 class ProductSchema(Schema):
@@ -19,4 +19,4 @@ def validate_product(raw_data):
 
 
 if __name__ == '__main__':
-    api.app.run(port=8080)
+    api.app.run(port=5000)
