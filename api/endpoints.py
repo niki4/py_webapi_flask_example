@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 
 from api import app
 from db import PRODUCTS
@@ -36,3 +36,10 @@ def products_handle():
             response = jsonify(errors)
             response.status_code = 400
             return response
+
+
+@app.route('/hello/', methods=['GET'])
+@app.route('/hello/<name>')
+def hello(name=None):
+    print(request.method)
+    return render_template('hello.html', name=name)
