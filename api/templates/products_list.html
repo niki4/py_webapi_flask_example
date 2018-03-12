@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+    <title>List of products</title>
+{% block body %}
+    <ul>
+        {% for product in products %}
+        <li><a href="{{ product.url }}">{{ product.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

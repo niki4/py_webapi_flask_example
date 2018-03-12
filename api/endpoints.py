@@ -1,11 +1,16 @@
 from flask import request, jsonify, render_template
+from flask import Blueprint
 
 from api import app
 from db import PRODUCTS
 from server import validate_product
 
 
-@app.route('/api/v1/products/', methods=['GET', 'POST'])
+products_app = Blueprint('products_app', __name__)    # /api/v1/products/
+cart_app = Blueprint('cart_app', __name__)            # /api/v1/cart/
+
+
+@products_app.route('/', methods=['GET', 'POST'])
 def products_handle():
     if request.method == 'GET':
         search_query = request.args.get('q')
