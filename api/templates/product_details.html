@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+    <title>Product details</title>
+{% block body %}
+        <h2>{{ product.title }}</h2>
+    <ul>
+        <li>Price: {{ product.price_rub}}</li>
+        <li>{{ product.product_image}}</li>
+        <li>Availability: {{"In stock" if  product.in_store else "Currently unavailable"}}</li>
+    </ul>
+{% endblock %}
