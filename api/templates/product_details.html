@@ -2,9 +2,20 @@
     <title>Product details</title>
 {% block body %}
         <h2>{{ product.title }}</h2>
-    <ul>
+<div style="display: flex;">
+    <div>
+        <img height="300" src="{{ url_for('static', filename=product.product_image) }}"  alt=''/>
+    </div>
+    <div>
+        {% if product.price_rub %}
         <li>Price: {{ product.price_rub}}</li>
-        <li>{{ product.product_image}}</li>
         <li>Availability: {{"In stock" if  product.in_store else "Currently unavailable"}}</li>
-    </ul>
+        {% endif %}
+        {% if features %}
+        <br>
+        <b>Features:</b>
+        <li>{% for name in features %} {{name}} {% endfor %}</li>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

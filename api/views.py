@@ -8,6 +8,8 @@ from flask.views import MethodView
 from model.db import Session
 from model.schemas import is_valid_product
 
+from model.db import AbstractModel, Product, Category, Feature
+
 
 class AbstractListView(MethodView):
     allow_boolean_filters = True
@@ -86,7 +88,7 @@ class AbstractProductView(MethodView):
         return jsonify(product_from_model.to_dict())
 
 
-def register_endpoints(app, model_class, _search_field_name, base_url):
+def register_endpoints(app, model_class, base_url, _search_field_name=None):
     class ApiListView(AbstractListView):
         model = model_class
         search_field_name = _search_field_name
@@ -111,7 +113,12 @@ def register_endpoints(app, model_class, _search_field_name, base_url):
 
         def get(self, product_id):
             product_from_model = json.loads(super().get(product_id).data)
-            return render_template('product_details.html', product=product_from_model)
+
+            session = Session()
+            features = session.query(Feature.name).filter(
+                Feature.category_id == product_from_model['category_id']).all()
+
+            return render_template('product_details.html', product=product_from_model, features=features)
 
     view_name = model_class.__name__.lower()
 
@@ -126,7 +133,7 @@ def register_endpoints(app, model_class, _search_field_name, base_url):
     app.add_url_rule('/%s/' % view_name,
                      view_func=RenderListView.as_view(
                          '%s_list' % view_name,
-                         template_name='%s_list.html' % view_name))
+                         template_name='product_list.html'))
 
     app.add_url_rule('/%s/<int:product_id>' % view_name,
                      view_func=RenderProductView.as_view('%s_details' % view_name))

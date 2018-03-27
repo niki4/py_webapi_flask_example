@@ -3,7 +3,12 @@
 {% block body %}
     <ul>
         {% for product in products %}
-            <li><a href="{{ product.id }}">{{ product.title }}</a></li>
+            <li>{% if product.title %}
+                <a href="{{ product.id }}">{{ product.title }}</a>
+                {% endif %}
+                {% if product.name %} {{ product.name }} {% endif %}
+                {% if product.category_name %} {{ product.category_name }} {% endif %}
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}
