@@ -1,5 +1,5 @@
 # py_webapi_flask_example
-Simple example of the wsgi-compatible API web app using Flask framework
+Simple example of the wsgi-compatible API web app using Flask framework.
 
 # Setup
 Once you've cloned the repo from GitHub, make sure you've created a virtual environment for experiments.
@@ -8,9 +8,13 @@ sudo pip3 install virtualenv
 python3 -m virtualenv ./venv
 source venv/bin/activate
 ```
-Now you can install some dependencies:
+Now you can install some dependencies (flask, marshmallow, etc.):
 ```
-pip3 install flask marshmallow
+pip3 install -r requirements.txt
+```
+The project requires db to be created. Simply run following script, it will create db structure and some initial test data:
+```
+python db_setup.py
 ```
 # Usage
 Simply run the server:
@@ -19,12 +23,28 @@ python server.py
 ```
 Now open browser and try the following API routes:
 ```
-http://127.0.0.1:8080/api/v1/products/?q=iphone
-http://127.0.0.1:8080/api/v1/products/?from=0&to=2
+http://127.0.0.1:5000/api/v1/product/?q=iphone
+http://127.0.0.1:5000/api/v1/product/?from=0&to=2
 ```
 Note on the params stated after ? symbol in URL.
 
-They are defined in endpoints.py, whilst the fetched data are from db.py
+They are defined in views.py, whilst the db models are from db.py
+
+To list all available products data set url endpoint without params:
+```
+http://127.0.0.1:5000/api/v1/product/
+```
+To view one desired product data just specify its id after endpoint:
+```
+http://127.0.0.1:5000/api/v1/product/1
+```
+
+## Rendering for browsers
+Flask uses [Jinja2](http://jinja.pocoo.org/) templates engine under hood. That means you may see the data in a pretty human-readable view with your browser. All the abovementioned options are suported. The difference is only in URL endpoint (without '/api/v1' part):
+```
+http://127.0.0.1:5000/product/
+http://127.0.0.1:5000/product/1
+```
 
 ## POST method and data validation
 The example project utilizes [marshmallow](https://marshmallow.readthedocs.io) framework to serve input data validation.
@@ -33,7 +53,7 @@ E.g., schema validation details defined in ProductSchema. If some mandatory data
 
 Missed Data case:
 ```
->>> r1 = requests.post('http://127.0.0.1:8080/api/v1/products/', json={'title': 'test'})
+>>> r1 = requests.post('http://127.0.0.1:5000/api/v1/products/', json={'title': 'test'})
 >>> r1.status_code
 400
 >>> r1.json()
@@ -41,7 +61,7 @@ Missed Data case:
 ```
 Valid Data case:
 ```
->>> r2 = requests.post('http://127.0.0.1:8080/api/v1/products/', json={'title': 'test2', 'price_rub': 12300})
+>>> r2 = requests.post('http://127.0.0.1:5000/api/v1/products/', json={'title': 'test2', 'price_rub': 12300})
 >>> r2.status_code
 200
 >>> r2.json()
