@@ -1,0 +1,10 @@
+language: python
+#platform
+python:
+  - "3.5"
+  - "3.6"
+# dependencies
+install:
+  - pip install -r requirements.txt
+# tests
+script: pytest
