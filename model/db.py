@@ -1,10 +1,11 @@
+import config
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import scoped_session, relationship
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///db.sqlite', echo=True)
+engine = create_engine(config.TestingConfig.DB_URI, echo=True)
 Base = declarative_base()
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)

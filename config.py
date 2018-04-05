@@ -2,6 +2,8 @@ class Config(object):
     DEBUG = False
     TESTING = False
     DB_URI = 'sqlite://:memory:'
+    BASE_URL = '/api/v1/'
+    PORT = 5000
 
 
 class ProductionConfig(Config):
@@ -14,3 +16,5 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
+    DB_URI = 'sqlite:///db.sqlite'
+    HOST = 'localhost'
