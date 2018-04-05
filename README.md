@@ -1,4 +1,4 @@
-# py_webapi_flask_example
+[![Build Status](https://travis-ci.org/niki4/py_webapi_flask_example.svg?branch=master)](https://travis-ci.org/niki4/py_webapi_flask_example)
 Simple example of the wsgi-compatible API web app using Flask framework.
 
 # Setup
@@ -53,17 +53,25 @@ E.g., schema validation details defined in ProductSchema. If some mandatory data
 
 Missed Data case:
 ```
->>> r1 = requests.post('http://127.0.0.1:5000/api/v1/products/', json={'title': 'test'})
+>>> r1 = requests.post('http://127.0.0.1:5000/api/v1/product/', json={'in_store': True})
 >>> r1.status_code
 400
 >>> r1.json()
-{'price_rub': ['Missing data for required field.']}
+{'title': ['Missing data for required field.'], 'price_rub': ['Missing data for required field.']}
+```
+Invalid Data case:
+```
+>>> r2 = requests.post('http://127.0.0.1:5000/api/v1/product/', json={'title': True, 'price_rub': 'some string'})
+>>> r2.status_code
+400
+>>> r2.json()
+{'title': ['Not a valid string.'], 'price_rub': ['Not a valid integer.']}
 ```
 Valid Data case:
 ```
->>> r2 = requests.post('http://127.0.0.1:5000/api/v1/products/', json={'title': 'test2', 'price_rub': 12300})
->>> r2.status_code
+>>> r3 = requests.post('http://127.0.0.1:5000/api/v1/product/', json={'title': 'test2', 'price_rub': 12300})
+>>> r3.status_code
 200
->>> r2.json()
+>>> r3.json()
 'ok'
 ```
