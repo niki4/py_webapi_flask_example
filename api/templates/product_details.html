@@ -1,21 +1,28 @@
-<!DOCTYPE html>
-    <title>Product details</title>
-{% block body %}
-        <h2>{{ product.title }}</h2>
-<div style="display: flex;">
-    <div>
-        <img height="300" src="{{ url_for('static', filename=product.product_image) }}"  alt=''/>
-    </div>
-    <div>
+{% extends "base.html" %}
+
+
+{% block app_content %}
+<h2>{{ product.title }}</h2>
+
+    <div class="row">
+        {% if product.product_image %}
+        <div class="col-sm-3">
+            <img height="300" src="{{ url_for('static', filename=product.product_image) }}"  alt=''/>
+        </div>
+        {% endif %}
         {% if product.price_rub %}
-        <li>Price: {{ product.price_rub}}</li>
-        <li>Availability: {{"In stock" if  product.in_store else "Currently unavailable"}}</li>
+        <div class="col-sm-2">
+            <li>Price: {{ product.price_rub / 100 }} ₽</li>
+            <li>Availability: {{"In stock" if  product.in_store else "Currently unavailable"}}</li>
         {% endif %}
         {% if features %}
-        <br>
-        <b>Features:</b>
-        <li>{% for name in features %} {{name}} {% endfor %}</li>
+            <br>
+            <b>Features:</b>
+            {% for name in features %}
+            <li>{{ name }}</li>
+            {% endfor %}
+        </div>
         {% endif %}
     </div>
-</div>
+
 {% endblock %}

@@ -1,6 +1,9 @@
-<!DOCTYPE html>
-    <title>List of products</title>
-{% block body %}
+{% extends "base.html" %}
+
+
+{% block app_content %}
+<h2>{{ title }}s</h2>
+
     <ul>
         {% for product in products %}
             <li>{% if product.title %}

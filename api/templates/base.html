@@ -1,0 +1,12 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    {% if title %}{{ title }} - DemoMarket{% else%}Welcome to DemoMarket!{% endif %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    {% block app_content %}{% endblock %}
+</div>
+{% endblock %}

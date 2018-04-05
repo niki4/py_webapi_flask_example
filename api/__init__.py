@@ -1,11 +1,14 @@
-# Import flask
 from flask import Flask
+from flask_bootstrap import Bootstrap
 
 # Define the WSGI application object
 app = Flask(__name__)
 
 # Set config
 app.config.from_object('config.DevelopmentConfig')
+
+bootstrap = Bootstrap()
+bootstrap.init_app(app)
 
 # # Register modules for endpoints
 # from .endpoints import products_app, cart_app
