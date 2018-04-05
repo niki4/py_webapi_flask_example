@@ -6,7 +6,7 @@ from flask import jsonify, request, abort, render_template, json
 from flask.views import MethodView
 
 from model.db import Session
-from model.schemas import is_valid_product
+from model.schemas import validate_product_schema
 
 from model.db import AbstractModel, Product, Category, Feature
 
@@ -29,13 +29,16 @@ class AbstractListView(MethodView):
     def post(self):
         session = Session()
         request_data = json.loads(request.data.decode('utf-8'))
-        if is_valid_product(request_data):
+        validation_errors = validate_product_schema(request_data)
+        if not validation_errors:
             product = self.model.from_dict(request_data)
             session.add(product)
             session.commit()
             return jsonify('ok')
         else:
-            abort(400, jsonify('data error'))
+            response = jsonify(validation_errors)
+            response.status_code = 400
+            return response
 
     def apply_boolean_filters(self, products_to_show):
         for column_name in self.get_boolean_column_names_from_model():
@@ -89,6 +92,8 @@ class AbstractProductView(MethodView):
 
 
 def register_endpoints(app, model_class, base_url, _search_field_name=None):
+    view_name = model_class.__name__.lower()
+
     class ApiListView(AbstractListView):
         model = model_class
         search_field_name = _search_field_name
@@ -103,7 +108,8 @@ def register_endpoints(app, model_class, base_url, _search_field_name=None):
 
         def dispatch_request(self):
             products_list = json.loads(self.products_list.data)
-            return render_template(self.template_name, products=products_list)
+            return render_template(self.template_name, products=products_list,
+                                   title='List of %s' % view_name)
 
     class ApiProductView(AbstractProductView):
         model = model_class
@@ -115,12 +121,11 @@ def register_endpoints(app, model_class, base_url, _search_field_name=None):
             product_from_model = json.loads(super().get(product_id).data)
 
             session = Session()
-            features = session.query(Feature.name).filter(
-                Feature.category_id == product_from_model['category_id']).all()
+            features = [feature.name for feature in session.query(Feature.name).filter(
+                Feature.category_id == product_from_model['category_id']).all()]
 
-            return render_template('product_details.html', product=product_from_model, features=features)
-
-    view_name = model_class.__name__.lower()
+            return render_template('product_details.html', product=product_from_model, features=features,
+                                   title='Details of %s' % view_name)
 
     # api urls for apps and services
     app.add_url_rule('%s/%s/' % (base_url.rstrip('/'), view_name),

@@ -8,6 +8,5 @@ class ProductSchema(Schema):
     in_store = fields.Bool(required=False)
 
 
-def is_valid_product(request_data):
-    errors = ProductSchema().validate(request_data)
-    return True if not errors else False
+def validate_product_schema(request_data):
+    return ProductSchema().validate(request_data)
