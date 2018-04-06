@@ -6,6 +6,5 @@ Jinja2==2.10
 MarkupSafe==1.0
 marshmallow==2.15.0
 pytest==3.5.0
-requests==2.18.4
 SQLAlchemy==1.2.5
 Werkzeug==0.14.1

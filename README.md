@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/niki4/py_webapi_flask_example.svg?branch=master)](https://travis-ci.org/niki4/py_webapi_flask_example)
+
 Simple example of the wsgi-compatible API web app using Flask framework.
 
 # Setup
